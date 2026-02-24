@@ -1,16 +1,58 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getGroupNames, saveGroupData } from '../utils/storage';
 
-export default function HomeScreen() {
+function HomeScreen() {
+  const [groups, setGroups] = useState([]);
+  const [newGroupName, setNewGroupName] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setGroups(getGroupNames());
+  }, []);
+
+  const handleCreateGroup = () => {
+    if (newGroupName.trim() === '') return;
+    // Creamos el grupo con listas vacías
+    saveGroupData(newGroupName, { players: [], restrictions: [] });
+    setGroups(getGroupNames());
+    setNewGroupName('');
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>¡REINSTALACIÓN EXITOSA!</Text>
-      <Text>Todo está limpio y funcionando.</Text>
-    </View>
+    <div style={{ padding: '20px' }}>
+      <h1>Mis Mejengas</h1>
+      
+      <div style={{ marginBottom: '20px' }}>
+        <input 
+          value={newGroupName}
+          onChange={(e) => setNewGroupName(e.target.value)}
+          placeholder="Nombre del grupo (ej: Voley Lunes)"
+          style={{ padding: '10px', width: '70%' }}
+        />
+        <button onClick={handleCreateGroup} style={{ padding: '10px' }}>Crear</button>
+      </div>
+
+      <div style={{ display: 'grid', gap: '10px' }}>
+        {groups.map(group => (
+          <div 
+            key={group} 
+            onClick={() => navigate(`/group/${group}`)}
+            style={{ 
+              padding: '20px', 
+              border: '1px solid #ccc', 
+              borderRadius: '8px', 
+              cursor: 'pointer',
+              backgroundColor: '#fff'
+            }}
+          >
+            <h3>{group}</h3>
+          </div>
+        ))}
+        {groups.length === 0 && <p>No hay grupos creados. ¡Crea el primero!</p>}
+      </div>
+    </div>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' },
-  text: { fontSize: 20, fontWeight: 'bold' }
-});
+export default HomeScreen;
