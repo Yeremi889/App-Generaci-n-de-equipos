@@ -24,40 +24,40 @@ function PlayerFormScreen() {
     };
 
     const handleSave = () => {
-        // 1. Limpiamos espacios en blanco
         const nombreLimpio = player.nombre.trim();
+        if (!nombreLimpio) return alert("¡El nombre es obligatorio, crack!");
 
-        // 2. Validación de campo vacío
-        if (!nombreLimpio) {
-        return alert("¡El nombre es obligatorio, crack!");
-        }
-
-        // 3. Obtener datos actuales del grupo
         const data = getGroupDetails(groupName);
-
-        // 4. VALIDACIÓN DE DUPLICADOS (Ignorando mayúsculas/minúsculas)
         const nombreExiste = data.players.some(
-        (p) => p.nombre.toLowerCase() === nombreLimpio.toLowerCase()
+            (p) => p.nombre.toLowerCase() === nombreLimpio.toLowerCase()
         );
 
         if (nombreExiste) {
-        return alert(`¡Ojo! Ya existe un jugador llamado "${nombreLimpio}" en este grupo. Prueba añadiendo un apellido o un apodo.`);
+            return alert(`¡Ojo! Ya existe un jugador llamado "${nombreLimpio}" en este grupo.`);
         }
 
-        // 5. Si todo está bien, calculamos promedio y guardamos
-        const values = Object.values(player.stats);
-        const promedio = (values.reduce((a, b) => a + b, 0) / values.length).toFixed(2);
+        // LÓGICA DE PROMEDIO CON HABILIDAD INVERSA (MALETA)
+        const statsKeys = Object.keys(player.stats);
+        const sumaPuntos = statsKeys.reduce((acc, key) => {
+            if (key === 'maleta') {
+                // Invertimos: 10 maleta suma 1 al promedio, 1 maleta suma 10
+                return acc + (11 - player.stats[key]);
+            }
+            return acc + player.stats[key];
+        }, 0);
+
+        const promedio = (sumaPuntos / statsKeys.length).toFixed(2);
         
         const newPlayer = { 
             ...player, 
-            nombre: nombreLimpio, // Guardamos el nombre ya sin espacios
+            nombre: nombreLimpio,
             id: Date.now().toString(), 
             promedio 
-    };
+        };
 
-    saveGroupData(groupName, { ...data, players: [...data.players, newPlayer] });
-    navigate(-1);
-  };
+        saveGroupData(groupName, { ...data, players: [...data.players, newPlayer] });
+        navigate(-1);
+    };
 
     return (
         <div className="screen-content fade-in">
@@ -92,15 +92,31 @@ function PlayerFormScreen() {
 
             <h3 className="section-title">Habilidades (Stats)</h3>
             <div className="card">
-                {Object.keys(player.stats).map(stat => (
-                    <div key={stat} className="stat-row">
-                        <div className="stat-info">
-                            <span className="stat-label">{stat.toUpperCase()}</span>
-                            <span className="stat-numb" style={{color: player.stats[stat] > 7 ? '#51cf66' : player.stats[stat] < 4 ? '#ff4d4d' : '#fd7e14'}}>{player.stats[stat]}</span>
+                {Object.keys(player.stats).map(stat => {
+                    const val = player.stats[stat];
+                    const isMaleta = stat === 'maleta';
+                    
+                    // Lógica de color inversa para Maleta
+                    const colorStat = isMaleta
+                        ? (val > 7 ? '#ff4d4d' : val < 4 ? '#51cf66' : '#fd7e14')
+                        : (val > 7 ? '#51cf66' : val < 4 ? '#ff4d4d' : '#fd7e14');
+
+                    return (
+                        <div key={stat} className="stat-row">
+                            <div className="stat-info">
+                                <span className="stat-label">{stat.toUpperCase()} {isMaleta && "(INVERSA)"}</span>
+                                <span className="stat-numb" style={{color: colorStat}}>{val}</span>
+                            </div>
+                            <input 
+                                type="range" 
+                                min="1" max="10" 
+                                className={`skill-slider level-${val} ${isMaleta ? 'maleta-slider' : ''}`} 
+                                value={val} 
+                                onChange={(e) => setPlayer({...player, stats: {...player.stats, [stat]: parseInt(e.target.value)}})} 
+                            />
                         </div>
-                        <input type="range" min="1" max="10" className={`skill-slider level-${player.stats[stat]}`} value={player.stats[stat]} onChange={(e) => setPlayer({...player, stats: {...player.stats, [stat]: parseInt(e.target.value)}})} />
-                    </div>
-                ))}
+                    );
+                })}
             </div>
             <button onClick={handleSave} className="btn-orange shadow-lg" style={{marginTop: '20px'}}>GUARDAR JUGADOR</button>
         </div>
