@@ -1,8 +1,13 @@
+/* src/styles/components.css - VERSIÓN FINAL OPTIMIZADA (350+ Líneas) */
+
+/* --- CONFIGURACIÓN DE PANTALLA Y CONTENEDORES --- */
 .screen-content {
   padding: 20px;
   flex: 1;
-  max-width: 600px;
+  width: 100%;           /* Ocupa el 100% en celulares */
+  max-width: 600px;      /* Se centra y limita en computadoras */
   margin: 0 auto;
+  box-sizing: border-box; /* Evita que el padding rompa el diseño */
 }
 
 .header-main {
@@ -259,6 +264,7 @@
   font-size: 15px;
   outline: none;
   transition: border-color 0.2s;
+  box-sizing: border-box; /* Crucial para móviles */
 }
 
 .main-input:focus {
@@ -343,4 +349,20 @@
   0% { transform: scale(1); }
   50% { transform: scale(1.03); }
   100% { transform: scale(1); }
+}
+
+/* --- ADAPTABILIDAD MÓVIL (MEDIA QUERIES) --- */
+@media (max-width: 480px) {
+  .screen-content {
+    padding: 15px;      /* Menos margen lateral para aprovechar espacio */
+    width: 100vw;       /* Asegura el ancho total del dispositivo */
+  }
+
+  .header-main h1 {
+    font-size: 26px;    /* Título más pequeño para que no se corte */
+  }
+
+  .card {
+    padding: 15px;
+  }
 }
