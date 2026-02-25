@@ -1,8 +1,7 @@
-// src/screens/HomeScreen.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getGroups, createGroup, deleteGroup } from '../utils/storage';
-import SearchBar from '../components/SearchBar'; // El nuevo componente
+import SearchBar from '../components/SearchBar';
 
 function HomeScreen() {
   const [groups, setGroups] = useState([]);
@@ -10,7 +9,7 @@ function HomeScreen() {
   const [newGroupName, setNewGroupName] = useState('');
   const navigate = useNavigate();
 
-  // Cargar grupos al iniciar
+  // Cargar grupos
   useEffect(() => {
     setGroups(getGroups());
   }, []);
@@ -23,7 +22,7 @@ function HomeScreen() {
   };
 
   const handleDelete = (name, e) => {
-    e.stopPropagation(); // Evita que al borrar se abra el grupo
+    e.stopPropagation();
     if (window.confirm(`¿Seguro que quieres borrar "${name}"?`)) {
       deleteGroup(name);
       setGroups(getGroups());
@@ -41,22 +40,22 @@ function HomeScreen() {
         <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#222' }}>
           Mis <span style={{ color: '#fd7e14' }}>Mejengas</span>
         </h1>
-        <p style={{ color: '#666', fontSize: '14px' }}>Organiza tus grupos de voley</p>
+        <p style={{ color: '#666', fontSize: '14px' }}>Organizador de equipos de voley</p>
       </header>
 
-      {/* Barra de búsqueda con el diseño que hicimos */}
+      {/* Barra de búsqueda*/}
       <SearchBar 
         value={searchTerm} 
         onChange={setSearchTerm} 
         placeholder="Buscar grupo..." 
       />
 
-      {/* Formulario para crear nuevo grupo (Integrado elegantemente) */}
+      {/* Formulario para crear nuevo grupo*/}
       <div className="card" style={{ border: '2px dashed #ddd', background: '#fcfcfc' }}>
         <div style={{ display: 'flex', gap: '10px' }}>
           <input
             type="text"
-            placeholder="Ej: Mejenga de los Jueves"
+            placeholder="Ej: Mejengas Lunes"
             value={newGroupName}
             onChange={(e) => setNewGroupName(e.target.value)}
             style={{ 

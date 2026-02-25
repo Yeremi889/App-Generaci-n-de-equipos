@@ -1,15 +1,11 @@
-// src/utils/storage.js
-
-// Obtener solo los nombres de los grupos para la lista principal
 export const getGroupNames = () => {
     const storage = JSON.parse(localStorage.getItem('voley_app_data')) || {};
     return Object.keys(storage);
 };
 
-// Alias para que HomeScreen no de error
 export const getGroups = getGroupNames; 
 
-// Obtener los detalles de un grupo específico (jugadores y reglas)
+// Obtener los detalles de un grupo 
 export const getGroupDetails = (groupName) => {
     const storage = JSON.parse(localStorage.getItem('voley_app_data')) || {};
     return storage[groupName] || { players: [], restrictions: [] };
@@ -22,7 +18,7 @@ export const saveGroupData = (groupName, data) => {
     localStorage.setItem('voley_app_data', JSON.stringify(storage));
 };
 
-// Crear un grupo vacío (Alias para la lógica de HomeScreen)
+// Crear un grupo vacío
 export const createGroup = (groupName) => {
     const storage = JSON.parse(localStorage.getItem('voley_app_data')) || {};
     if (!storage[groupName]) {

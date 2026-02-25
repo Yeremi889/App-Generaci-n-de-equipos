@@ -1,4 +1,3 @@
-// src/components/SearchBar.js
 import React from 'react';
 
 function SearchBar({ value, onChange, placeholder }) {

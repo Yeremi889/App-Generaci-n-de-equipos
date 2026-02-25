@@ -1,4 +1,3 @@
-// src/screens/GenerateTeamsScreen.js
 import React, { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { generateTeams as generarEquipos } from '../utils/algorithm'; //
@@ -18,21 +17,21 @@ function GenerateTeamsScreen() {
     if (!equipos) return (
         <div className="screen-content">
             <button onClick={() => navigate(-1)} className="back-link">← Volver</button>
-            <p>No hay datos suficientes para generar equipos.</p>
+            <p>Selecciona los jugadores necesarios para jugar</p>
         </div>
     );
 
     return (
         <div className="screen-content fade-in" style={{ paddingBottom: '40px' }}>
             <header className="header-main">
-                <button onClick={() => navigate(-1)} className="back-link">← Volver a Convocatoria</button>
-                <h1 style={{ marginTop: '10px' }}>Equipos <span style={{ color: '#fd7e14' }}>Equilibrados</span></h1>
+                <button onClick={() => navigate(-1)} className="back-link">← Volver a Seleccion</button>
+                <h1 style={{ marginTop: '10px' }}>Equipos <span style={{ color: '#fd7e14' }}>Generados</span></h1>
             </header>
 
             {/* Resumen de Calidad */}
             <div className="card-dark" style={{ marginBottom: '25px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', opacity: 0.8 }}>
-                    <span>Estado del Sorteo:</span>
+                    <span>Completitud:</span>
                     <span>{numTeams} Equipos Generados</span>
                 </div>
                 <div style={{ background: '#444', height: '6px', borderRadius: '3px', marginTop: '8px', overflow: 'hidden' }}>
@@ -57,7 +56,7 @@ function GenerateTeamsScreen() {
 
             <div style={{ marginTop: '30px' }}>
                 <button className="btn-orange shadow-lg pulse" onClick={() => window.location.reload()}>
-                    🔄 RE-SORTEAR EQUIPOS
+                     REGENERAR EQUIPOS
                 </button>
             </div>
         </div>

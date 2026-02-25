@@ -1,4 +1,3 @@
-// src/screens/GroupDetailScreen.js
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getGroupDetails, saveGroupData } from '../utils/storage';
@@ -13,30 +12,30 @@ function GroupDetailScreen() {
   const [selectedIds, setSelectedIds] = useState([]);
   const [numTeams, setNumTeams] = useState(2);
 
-  // Carga inicial de datos del grupo
+  // Carga inicial de datos
   useEffect(() => {
     const groupData = getGroupDetails(groupName);
     setData(groupData);
   }, [groupName]);
 
-  // Selección/Deselección de jugadores para la convocatoria
+  // Selección/Deselección de jugadores
   const togglePlayer = (id) => {
     setSelectedIds(prev => 
       prev.includes(id) ? prev.filter(pId => pId !== id) : [...prev, id]
     );
   };
 
-  // Lógica para eliminar un jugador del grupo permanentemente
+  // Eliminar un jugador del grupo
   const handleDeletePlayer = (id, e) => {
-    e.stopPropagation(); // Evita que se seleccione el jugador al intentar borrarlo
-    if (window.confirm("¿Estás seguro de que quieres eliminar a este jugador del grupo?")) {
+    e.stopPropagation();
+    if (window.confirm("¿Estás seguro de que quieres eliminar a este jugador?")) {
       const updatedPlayers = data.players.filter(p => p.id !== id);
       const updatedData = { ...data, players: updatedPlayers };
       
       saveGroupData(groupName, updatedData);
       setData(updatedData);
       
-      // Si el jugador estaba seleccionado, lo quitamos de la lista de selección
+      // Si el jugador estaba seleccionado, se quita de la lista de selección
       setSelectedIds(prev => prev.filter(pId => pId !== id));
     }
   };
@@ -115,10 +114,10 @@ function GroupDetailScreen() {
         placeholder="Buscar jugador..." 
       />
 
-      {/* Estado de la Convocatoria */}
+      {/* Estado de seleccion */}
       <div style={{ marginBottom: '15px', padding: '0 5px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span className="text-muted">Convocatoria actual:</span>
+          <span className="text-muted">Jugadores seleccionados:</span>
           <span className={`player-avg-bubble ${selectedIds.length === requiredPlayers ? 'pulse' : ''}`} 
                 style={{ background: selectedIds.length === requiredPlayers ? '#51cf66' : '#f0f4ff', 
                          color: selectedIds.length === requiredPlayers ? 'white' : '#007bff' }}>
@@ -127,7 +126,7 @@ function GroupDetailScreen() {
         </div>
       </div>
 
-      {/* Lista de Jugadores con Tarjetas Modernas */}
+      {/* Lista de Jugadores*/}
       <div style={{ paddingBottom: '100px' }}>
         {filteredPlayers.length > 0 ? (
           filteredPlayers.map(player => (
@@ -150,7 +149,7 @@ function GroupDetailScreen() {
       {selectedIds.length === requiredPlayers && (
         <div className="floating-btn-area">
           <button className="btn-orange shadow-lg pulse" onClick={handleGenerate}>
-            ¡ARMAR EQUIPOS AHORA! 🏐
+            ¡ARMAR EQUIPOS!
           </button>
         </div>
       )}

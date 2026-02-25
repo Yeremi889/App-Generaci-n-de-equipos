@@ -11,7 +11,7 @@ function RestrictionsScreen() {
     useEffect(() => { setData(getGroupDetails(groupName)); }, [groupName]);
 
     const addRes = () => {
-        if (!newRes.jugadorA || !newRes.jugadorB || newRes.jugadorA === newRes.jugadorB) return alert("Selecciona dos distintos");
+        if (!newRes.jugadorA || !newRes.jugadorB || newRes.jugadorA === newRes.jugadorB) return alert("Seleccionar dos distintos");
         const updated = { ...data, restrictions: [...data.restrictions, { ...newRes, id: Date.now().toString() }] };
         saveGroupData(groupName, updated);
         setData(updated);
@@ -30,17 +30,17 @@ function RestrictionsScreen() {
                         <option value="">Jugador A...</option>
                         {data.players.map(p => <option key={p.id} value={p.nombre}>{p.nombre}</option>)}
                     </select>
-                    <div style={{textAlign:'center', fontWeight:'bold', color:'#fd7e14'}}>NO JUEGA CON</div>
+                    <div style={{textAlign:'center', fontWeight:'bold', color:'#fd7e14'}}>En Conflicto Con</div>
                     <select className="main-input" onChange={e => setNewRes({...newRes, jugadorB: e.target.value})}>
                         <option value="">Jugador B...</option>
                         {data.players.map(p => <option key={p.id} value={p.nombre}>{p.nombre}</option>)}
                     </select>
                     <select className="main-input" value={newRes.prioridad} onChange={e => setNewRes({...newRes, prioridad: parseInt(e.target.value)})}>
-                        <option value={1}>Poca importancia (P1)</option>
+                        <option value={1}>Leve (P1)</option>
                         <option value={2}>Importante (P2)</option>
-                        <option value={3}>Extrema (Separar sí o sí) (P3)</option>
+                        <option value={3}>Difícil de ignorar (P3)</option>
                     </select>
-                    <button onClick={addRes} className="btn-orange" style={{background:'#333'}}>AÑADIR REGLA</button>
+                    <button onClick={addRes} className="btn-orange" style={{background:'#333'}}>CREAR RESTRICCIÓN</button>
                 </div>
             </div>
 

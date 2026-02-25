@@ -1,4 +1,3 @@
-// src/utils/algorithm.js
 import { TEAM_NAMES } from './constants';
 
 export const generateTeams = (players, restrictions, numTeams) => {

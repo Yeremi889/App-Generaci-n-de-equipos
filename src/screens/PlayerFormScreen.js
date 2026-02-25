@@ -25,7 +25,7 @@ function PlayerFormScreen() {
 
     const handleSave = () => {
         const nombreLimpio = player.nombre.trim();
-        if (!nombreLimpio) return alert("¡El nombre es obligatorio, crack!");
+        if (!nombreLimpio) return alert("Olvidaste ponerle un nombre a la maleta");
 
         const data = getGroupDetails(groupName);
         const nombreExiste = data.players.some(
@@ -33,10 +33,9 @@ function PlayerFormScreen() {
         );
 
         if (nombreExiste) {
-            return alert(`¡Ojo! Ya existe un jugador llamado "${nombreLimpio}" en este grupo.`);
+            return alert(`Ya existe un jugador llamado "${nombreLimpio}" en el grupo.`);
         }
 
-        // LÓGICA DE PROMEDIO CON HABILIDAD INVERSA (MALETA)
         const statsKeys = Object.keys(player.stats);
         const sumaPuntos = statsKeys.reduce((acc, key) => {
             if (key === 'maleta') {
@@ -96,7 +95,6 @@ function PlayerFormScreen() {
                     const val = player.stats[stat];
                     const isMaleta = stat === 'maleta';
                     
-                    // Lógica de color inversa para Maleta
                     const colorStat = isMaleta
                         ? (val > 7 ? '#ff4d4d' : val < 4 ? '#51cf66' : '#fd7e14')
                         : (val > 7 ? '#51cf66' : val < 4 ? '#ff4d4d' : '#fd7e14');

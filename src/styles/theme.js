@@ -1,7 +1,6 @@
-// src/styles/theme.js
 export const theme = {
   colors: {
-    primary: '#fd7e14',   // Tu naranja característico
+    primary: '#fd7e14',
     secondary: '#333',
     background: '#f8f9fa',
     white: '#ffffff',

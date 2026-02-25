@@ -1,11 +1,9 @@
-// src/utils/constants.js
-
 export const POSICIONES = ["Punta", "Centro", "Colocador"];
 
 export const POS_MAP = { 
-    "Punta": "Pnt", 
-    "Centro": "CTRL", 
-    "Colocador": "CLDR" 
+    "Punta": "PNT", 
+    "Centro": "CTR", 
+    "Colocador": "CDR" 
 };
 
 export const POS_ORDER = { 
@@ -15,6 +13,9 @@ export const POS_ORDER = {
 };
 
 export const TEAM_NAMES = [
-    "Los Mata-Ballenas", "Saque del Terror", "Net-Masters", 
-    "Bloqueo Fantasma", "Dinos del Voley", "Pura Vida Voley"
+    "Maletas FC", "SAQUES AL TECHO", "LOS MADAFOKIN", 
+    "DIEGO NORREA", "LEANDRO GADO", "NORBERTO Y SUS AMIGOS",
+    "JOSEBA JATANGAS", "FC BOTELLONAS", "ELCHE GEVARA",    
+    "ATLETICO ÑETE", "FACHADOLID", "ASTON BIRRAS",
+    "KETO CABOLAS", "HOO LEE SHET"
 ];
