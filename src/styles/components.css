@@ -1,13 +1,10 @@
-/* src/styles/components.css - VERSIÓN FINAL OPTIMIZADA (350+ Líneas) */
-
-/* --- CONFIGURACIÓN DE PANTALLA Y CONTENEDORES --- */
 .screen-content {
   padding: 20px;
   flex: 1;
-  width: 100%;           /* Ocupa el 100% en celulares */
-  max-width: 600px;      /* Se centra y limita en computadoras */
+  width: 100%;         
+  max-width: 600px;      
   margin: 0 auto;
-  box-sizing: border-box; /* Evita que el padding rompa el diseño */
+  box-sizing: border-box; 
 }
 
 .header-main {
@@ -351,15 +348,15 @@
   100% { transform: scale(1); }
 }
 
-/* --- ADAPTABILIDAD MÓVIL (MEDIA QUERIES) --- */
+/* --- ADAPTABILIDAD MÓVIL --- */
 @media (max-width: 480px) {
   .screen-content {
-    padding: 15px;      /* Menos margen lateral para aprovechar espacio */
-    width: 100vw;       /* Asegura el ancho total del dispositivo */
+    padding: 15px;      
+    width: 100vw;      
   }
 
   .header-main h1 {
-    font-size: 26px;    /* Título más pequeño para que no se corte */
+    font-size: 26px;   
   }
 
   .card {
