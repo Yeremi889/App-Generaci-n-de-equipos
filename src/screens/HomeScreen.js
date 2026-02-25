@@ -38,7 +38,7 @@ function HomeScreen() {
     <div className="screen-content fade-in">
       <header style={{ marginBottom: '30px', textAlign: 'center' }}>
         <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#222' }}>
-          Mis <span style={{ color: '#fd7e14' }}>Mejengas</span>
+          Organizar <span style={{ color: '#fd7e14' }}>Mejengas</span>
         </h1>
         <p style={{ color: '#666', fontSize: '14px' }}>Organizador de equipos de voley</p>
       </header>
