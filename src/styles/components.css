@@ -1,0 +1,349 @@
+/* src/styles/components.css - VERSIÓN FINAL COMPLETA */
+
+/* --- CONFIGURACIÓN DE PANTALLA Y CONTENEDORES --- */
+.screen-content {
+  padding: 20px;
+  flex: 1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.header-main {
+  margin-bottom: 25px;
+}
+
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.section-title {
+  font-size: 18px;
+  margin: 20px 0 10px 0;
+  font-weight: 800;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- BOTONES Y ENLACES --- */
+.btn-orange {
+  background-color: #fd7e14;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 14px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  width: 100%;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(253, 126, 20, 0.2);
+}
+
+.btn-orange:hover {
+  background-color: #e67300;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(253, 126, 20, 0.3);
+}
+
+.btn-orange:active {
+  transform: scale(0.96);
+}
+
+.back-link {
+  background: none;
+  border: none;
+  color: #fd7e14;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+}
+
+.btn-add-plus {
+  background: #333;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: 0.2s;
+}
+
+.btn-add-plus:hover {
+  transform: rotate(90deg);
+  background: #fd7e14;
+}
+
+/* --- TARJETAS (CARDS) --- */
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid #edf0f2;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  margin-bottom: 15px;
+  transition: all 0.2s;
+}
+
+.card-dark {
+  background: #333;
+  color: white;
+  border-radius: 16px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+/* --- LISTA DE JUGADORES (MODERNA) --- */
+.player-card-modern {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 15px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  border: 1px solid #eee;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.player-card-modern:hover {
+  border-color: #ddd;
+  transform: translateX(5px);
+}
+
+.player-card-modern.selected {
+  border-left: 6px solid #fd7e14;
+  background-color: #fffcf9;
+  box-shadow: 0 4px 15px rgba(253, 126, 20, 0.1);
+}
+
+.check-indicator {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+
+.check-indicator.active {
+  background: #fd7e14;
+  border-color: #fd7e14;
+  position: relative;
+}
+
+.check-indicator.active::after {
+  content: '✓';
+  color: white;
+  font-size: 12px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* --- BADGES Y CHIPS --- */
+.pos-chips-list {
+  display: flex;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.badge-main {
+  font-size: 10px;
+  background: #333;
+  color: white;
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-weight: 800;
+}
+
+.badge-sec {
+  font-size: 10px;
+  background: #f1f3f5;
+  color: #666;
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid #e9ecef;
+}
+
+.chip-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.chip {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 2px solid #eee;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.chip.active {
+  border-color: #fd7e14;
+  color: #fd7e14;
+  background: #fff5eb;
+}
+
+.chip.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: #f8f9fa;
+}
+
+/* --- SLIDERS DE HABILIDADES (STATS) --- */
+.stat-row {
+  margin-bottom: 18px;
+}
+
+.stat-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #666;
+}
+
+.stat-numb {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.skill-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: #eee;
+  outline: none;
+}
+
+.skill-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #fd7e14;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* --- INPUTS Y SELECTS --- */
+.main-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #eee;
+  border-radius: 12px;
+  margin: 8px 0 16px 0;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.main-input:focus {
+  border-color: #fd7e14;
+}
+
+/* --- SELECTOR DE EQUIPOS --- */
+.selector-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.teams-toggle {
+  display: flex;
+  background: #444;
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.teams-toggle button {
+  background: none;
+  border: none;
+  color: #aaa;
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.teams-toggle button.active {
+  background: #fd7e14;
+  color: white;
+}
+
+/* --- UTILIDADES --- */
+.text-muted {
+  font-size: 13px;
+  color: #888;
+  font-weight: 600;
+}
+
+.player-avg-bubble {
+  background: #f0f4ff;
+  color: #007bff;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.btn-trash-icon {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: 0.2s;
+}
+
+.btn-trash-icon:hover {
+  opacity: 1;
+  color: #dc3545;
+  transform: scale(1.1);
+}
+
+.floating-btn-area {
+  position: sticky;
+  bottom: 25px;
+  left: 0;
+  right: 0;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+.pulse {
+  animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}

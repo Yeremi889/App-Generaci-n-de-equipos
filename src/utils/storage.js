@@ -1,45 +1,39 @@
-const STORAGE_KEY = '@voley_app_data';
+// src/utils/storage.js
 
-/**
- * Estructura del storage:
- * {
- * "grupos": {
- * "NombreGrupo1": {
- * "players": [...],
- * "restrictions": [...]
- * }
- * }
- * }
- */
-
-// Obtiene toda la base de datos
-export const getFullStorage = () => {
-  const data = localStorage.getItem(STORAGE_KEY);
-  return data ? JSON.parse(data) : { grupos: {} };
-};
-
-// Guarda un grupo específico o actualiza uno existente
-export const saveGroupData = (groupName, groupContent) => {
-  const storage = getFullStorage();
-  storage.grupos[groupName] = groupContent;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(storage));
-};
-
-// Obtiene los nombres de todos los grupos para la pantalla de inicio
+// Obtener solo los nombres de los grupos para la lista principal
 export const getGroupNames = () => {
-  const storage = getFullStorage();
-  return Object.keys(storage.grupos);
+    const storage = JSON.parse(localStorage.getItem('voley_app_data')) || {};
+    return Object.keys(storage);
 };
 
-// Obtiene la data completa de un grupo (jugadores + restricciones)
+// Alias para que HomeScreen no de error
+export const getGroups = getGroupNames; 
+
+// Obtener los detalles de un grupo específico (jugadores y reglas)
 export const getGroupDetails = (groupName) => {
-  const storage = getFullStorage();
-  return storage.grupos[groupName] || { players: [], restrictions: [] };
+    const storage = JSON.parse(localStorage.getItem('voley_app_data')) || {};
+    return storage[groupName] || { players: [], restrictions: [] };
 };
 
-// Eliminar un grupo
+// Guardar o crear un grupo nuevo
+export const saveGroupData = (groupName, data) => {
+    const storage = JSON.parse(localStorage.getItem('voley_app_data')) || {};
+    storage[groupName] = data;
+    localStorage.setItem('voley_app_data', JSON.stringify(storage));
+};
+
+// Crear un grupo vacío (Alias para la lógica de HomeScreen)
+export const createGroup = (groupName) => {
+    const storage = JSON.parse(localStorage.getItem('voley_app_data')) || {};
+    if (!storage[groupName]) {
+        storage[groupName] = { players: [], restrictions: [] };
+        localStorage.setItem('voley_app_data', JSON.stringify(storage));
+    }
+};
+
+// Borrar un grupo
 export const deleteGroup = (groupName) => {
-  const storage = getFullStorage();
-  delete storage.grupos[groupName];
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(storage));
+    const storage = JSON.parse(localStorage.getItem('voley_app_data')) || {};
+    delete storage[groupName];
+    localStorage.setItem('voley_app_data', JSON.stringify(storage));
 };
