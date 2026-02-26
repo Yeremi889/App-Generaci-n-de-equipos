@@ -5,7 +5,7 @@ import { generateTeams } from '../utils/algorithm';
 function GenerateTeamsScreen() {
     const location = useLocation();
     const navigate = useNavigate();
-    const [seed, setSeed] = useState(0); // Para forzar regeneración limpia
+    const [seed, setSeed] = useState(0);
     
     const { players, restrictions, numTeams } = location.state || { players: [], restrictions: [], numTeams: 2 };
 
@@ -25,7 +25,7 @@ function GenerateTeamsScreen() {
         <div className="screen-content fade-in" style={{ paddingBottom: '40px' }}>
             <header className="header-main">
                 <button onClick={() => navigate(-1)} className="back-link">← Volver</button>
-                <h1 style={{ marginTop: '10px' }}>Equipos <span style={{ color: '#fd7e14' }}>Oficiales</span></h1>
+                <h1 style={{ marginTop: '10px' }}>Equipos <span style={{ color: '#fd7e14' }}>Generados</span></h1>
             </header>
 
             <div className="teams-grid">
@@ -40,18 +40,12 @@ function GenerateTeamsScreen() {
                                         {player.rolFinal.toUpperCase()}
                                     </span>
                                 </div>
-                                <div style={{ fontSize: '20px' }}>
-                                    {player.genero === 'FEMENINO' ? '👩' : '👨'}
-                                </div>
                             </div>
                         ))}
                     </div>
                 ))}
             </div>
             
-            <button className="btn-orange shadow-lg pulse" onClick={() => setSeed(s => s + 1)}>
-                 MEZCLAR DE NUEVO
-            </button>
         </div>
     );
 }

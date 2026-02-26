@@ -4,7 +4,7 @@ export const generateTeams = (players, restrictions, numTeams) => {
     const TEAM_SIZE = 6;
     if (players.length !== (TEAM_SIZE * numTeams)) return null;
 
-    // --- 1. CENSO TÁCTICO Y DE GÉNERO ---
+    // --- CENSO Y VALIDACION DE GÉNERO ---
     const totalMujeres = players.filter(p => p.genero === 'FEMENINO').length;
     const cuotaBaseFem = Math.floor(totalMujeres / numTeams);
     const sobranteFem = totalMujeres % numTeams;
@@ -23,7 +23,7 @@ export const generateTeams = (players, restrictions, numTeams) => {
         return rol === "Colocador" ? (s.colocacion + s.recepcion) / 2 : (s.ataque + s.bloqueo + s.recepcion) / 3;
     };
 
-    // --- 2. ASIGNACIÓN POR CAPAS DE AFINIDAD ---
+    // --- ASIGNACIÓN POR CAPAS DE AFINIDAD ---
     const ROLES = [
         { tipo: "Colocador", cant: 2 },
         { tipo: "Centro", cant: 2 },
@@ -32,21 +32,21 @@ export const generateTeams = (players, restrictions, numTeams) => {
 
     ROLES.forEach(bloque => {
         for (let i = 0; i < bloque.cant; i++) {
-            // Equilibrio Dinámico: El equipo con menos fuerza elige primero en cada ronda
+            // Equilibrio: El equipo con menos fuerza elige primero en cada ronda
             equipos.sort((a, b) => a.fuerzaTotal - b.fuerzaTotal);
 
             equipos.forEach(equipo => {
                 if (equipo.members.filter(m => m.rolFinal === bloque.tipo).length >= bloque.cant) return;
 
-                // FILTRADO JERÁRQUICO (Prioridad Real)
+                // FILTRADO JERÁRQUICO
                 let candidatos = disponibles.filter(p => {
-                    // Restricción P3: No negociable
+                    // Restricción P3
                     const conflictoP3 = restrictions.some(r => r.level === "P3" && 
                         ((r.p1 === p.id && equipo.members.some(m => m.id === r.p2)) || 
                          (r.p2 === p.id && equipo.members.some(m => m.id === r.p1))));
                     if (conflictoP3) return false;
 
-                    // Cuota de Género: Mantener paridad
+                    // Cuota de Género
                     if (p.genero === 'FEMENINO' && equipo.mujeresContador >= equipo.cuotaFem) return false;
                     
                     return true;
@@ -54,12 +54,12 @@ export const generateTeams = (players, restrictions, numTeams) => {
 
                 if (candidatos.length === 0) candidatos = [...disponibles];
 
-                // Búsqueda por Vocación (Lis Protection)
+                // Búsqueda por Vocación
                 let elegido = 
                     candidatos.find(p => p.posicionPrincipal === bloque.tipo) ||
                     candidatos.find(p => p.posicionesSecundarias.includes(bloque.tipo));
 
-                // Si nadie tiene la posición ni como secundaria, buscamos por Talento (Emergencia)
+                // Si nadie tiene la posición ni como secundaria, busca por aptitud
                 if (!elegido) {
                     elegido = candidatos.sort((a, b) => getAptitud(b, bloque.tipo) - getAptitud(a, bloque.tipo))[0];
                 }
@@ -74,7 +74,7 @@ export const generateTeams = (players, restrictions, numTeams) => {
         }
     });
 
-    // Ordenar visualmente: Colocador -> Centro -> Punta
+    // Orden visual
     const ordenPos = { "Colocador": 1, "Centro": 2, "Punta": 3 };
     return equipos.map(eq => ({
         ...eq,
