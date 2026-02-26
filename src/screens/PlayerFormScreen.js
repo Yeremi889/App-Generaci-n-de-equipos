@@ -6,8 +6,11 @@ import { saveGroupData, getGroupDetails } from '../utils/storage';
 function PlayerFormScreen() {
     const { groupName } = useParams();
     const navigate = useNavigate();
+    
+    // 1. Estado actualizado con el campo 'genero'
     const [player, setPlayer] = useState({
         nombre: '',
+        genero: 'MASCULINO', // Valor inicial por defecto
         posicionPrincipal: 'Punta',
         posicionesSecundarias: [],
         stats: { ataque: 5, bloqueo: 5, saque: 5, recepcion: 5, colocacion: 5, maleta: 5 }
@@ -39,7 +42,7 @@ function PlayerFormScreen() {
         const statsKeys = Object.keys(player.stats);
         const sumaPuntos = statsKeys.reduce((acc, key) => {
             if (key === 'maleta') {
-                // Invertimos: 10 maleta suma 1 al promedio, 1 maleta suma 10
+                // Mantenemos la lógica de inversión: 10 maleta suma 1 al promedio
                 return acc + (11 - player.stats[key]);
             }
             return acc + player.stats[key];
@@ -68,6 +71,20 @@ function PlayerFormScreen() {
             <div className="card shadow-sm">
                 <label className="text-muted">Nombre</label>
                 <input className="main-input" value={player.nombre} onChange={e => setPlayer({...player, nombre: e.target.value})} placeholder="Nombre del jugador" />
+
+                {/* 2. Nuevo Selector de Género */}
+                <label className="text-muted">Género</label>
+                <div className="chip-container" style={{marginBottom: '20px'}}>
+                    {['MASCULINO', 'FEMENINO'].map(g => (
+                        <button 
+                            key={g} 
+                            className={`chip ${player.genero === g ? 'active' : ''}`}
+                            onClick={() => setPlayer({...player, genero: g})}
+                        >
+                            {g}
+                        </button>
+                    ))}
+                </div>
 
                 <label className="text-muted">Posición Principal</label>
                 <select className="main-input" value={player.posicionPrincipal} onChange={e => setPlayer({...player, posicionPrincipal: e.target.value, posicionesSecundarias: []})}>

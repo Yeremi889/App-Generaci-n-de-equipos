@@ -1,66 +1,83 @@
 import { TEAM_NAMES } from './constants';
 
 export const generateTeams = (players, restrictions, numTeams) => {
-    let bestSelection = null;
-    let minPenalty = Infinity;
+    const TEAM_SIZE = 6;
+    if (players.length !== (TEAM_SIZE * numTeams)) return null;
 
-    const names = [...TEAM_NAMES].sort(() => Math.random() - 0.5);
-    const shuffle = (array) => [...array].sort(() => Math.random() - 0.5);
+    // --- CENSO Y VALIDACION DE GÉNERO ---
+    const totalMujeres = players.filter(p => p.genero === 'FEMENINO').length;
+    const cuotaBaseFem = Math.floor(totalMujeres / numTeams);
+    const sobranteFem = totalMujeres % numTeams;
 
-    for (let i = 0; i < 3000; i++) {
-        const shuffled = shuffle(players);
-        const teams = Array.from({ length: numTeams }, (v, k) => ({
-            name: names[k] || `Equipo ${k + 1}`,
-            members: []
-        }));
-        
-        shuffled.forEach((player, index) => {
-            if (index < numTeams * 6) {
-                const teamIdx = index % numTeams;
-                const currentTeam = teams[teamIdx].members;
-                const ocupados = {
-                    "Colocador": currentTeam.filter(m => m.rolAsignado === "Colocador").length,
-                    "Centro": currentTeam.filter(m => m.rolAsignado === "Centro").length,
-                    "Punta": currentTeam.filter(m => m.rolAsignado === "Punta").length
-                };
+    let disponibles = [...players];
+    let equipos = Array.from({ length: numTeams }, (_, i) => ({
+        name: TEAM_NAMES[Math.floor(Math.random() * TEAM_NAMES.length)] || `SQUAD ${i + 1}`,
+        members: [],
+        fuerzaTotal: 0,
+        mujeresContador: 0,
+        cuotaFem: cuotaBaseFem + (i < sobranteFem ? 1 : 0)
+    }));
 
-                let rolFinal = player.posicionPrincipal;
-                if (ocupados[player.posicionPrincipal] >= 2) {
-                    const secundariaValida = player.posicionesSecundarias?.find(sec => ocupados[sec] < 2);
-                    if (secundariaValida) rolFinal = secundariaValida;
+    const getAptitud = (p, rol) => {
+        const s = p.stats;
+        return rol === "Colocador" ? (s.colocacion + s.recepcion) / 2 : (s.ataque + s.bloqueo + s.recepcion) / 3;
+    };
+
+    // --- ASIGNACIÓN POR CAPAS DE AFINIDAD ---
+    const ROLES = [
+        { tipo: "Colocador", cant: 2 },
+        { tipo: "Centro", cant: 2 },
+        { tipo: "Punta", cant: 2 }
+    ];
+
+    ROLES.forEach(bloque => {
+        for (let i = 0; i < bloque.cant; i++) {
+            // Equilibrio: El equipo con menos fuerza elige primero en cada ronda
+            equipos.sort((a, b) => a.fuerzaTotal - b.fuerzaTotal);
+
+            equipos.forEach(equipo => {
+                if (equipo.members.filter(m => m.rolFinal === bloque.tipo).length >= bloque.cant) return;
+
+                // FILTRADO JERÁRQUICO
+                let candidatos = disponibles.filter(p => {
+                    // Restricción P3
+                    const conflictoP3 = restrictions.some(r => r.level === "P3" && 
+                        ((r.p1 === p.id && equipo.members.some(m => m.id === r.p2)) || 
+                         (r.p2 === p.id && equipo.members.some(m => m.id === r.p1))));
+                    if (conflictoP3) return false;
+
+                    // Cuota de Género
+                    if (p.genero === 'FEMENINO' && equipo.mujeresContador >= equipo.cuotaFem) return false;
+                    
+                    return true;
+                });
+
+                if (candidatos.length === 0) candidatos = [...disponibles];
+
+                // Búsqueda por Vocación
+                let elegido = 
+                    candidatos.find(p => p.posicionPrincipal === bloque.tipo) ||
+                    candidatos.find(p => p.posicionesSecundarias.includes(bloque.tipo));
+
+                // Si nadie tiene la posición ni como secundaria, busca por aptitud
+                if (!elegido) {
+                    elegido = candidatos.sort((a, b) => getAptitud(b, bloque.tipo) - getAptitud(a, bloque.tipo))[0];
                 }
-                teams[teamIdx].members.push({ ...player, rolAsignado: rolFinal });
-            }
-        });
 
-        let currentPenalty = 0;
-        const membersOnly = teams.map(t => t.members);
-
-        // A. Penalización por Nivel
-        const teamAverages = membersOnly.map(team => team.reduce((sum, p) => sum + parseFloat(p.promedio), 0));
-        currentPenalty += (Math.max(...teamAverages) - Math.min(...teamAverages)) * 100;
-
-        // B. Restricciones
-        restrictions.forEach(res => {
-            membersOnly.forEach(team => {
-                if (team.some(p => p.nombre === res.jugadorA) && team.some(p => p.nombre === res.jugadorB)) {
-                    currentPenalty += res.prioridad === 3 ? 100000 : res.prioridad === 2 ? 5000 : 1000;
+                if (elegido) {
+                    equipo.members.push({ ...elegido, rolFinal: bloque.tipo });
+                    equipo.fuerzaTotal += parseFloat(elegido.promedio);
+                    if (elegido.genero === 'FEMENINO') equipo.mujeresContador++;
+                    disponibles = disponibles.filter(p => p.id !== elegido.id);
                 }
             });
-        });
-
-        // C. Balance de roles (2 por posición)
-        membersOnly.forEach(team => {
-            const roles = team.map(m => m.rolAsignado);
-            ["Colocador", "Centro", "Punta"].forEach(r => {
-                if (roles.filter(x => x === r).length !== 2) currentPenalty += 8000;
-            });
-        });
-
-        if (currentPenalty < minPenalty) {
-            minPenalty = currentPenalty;
-            bestSelection = teams;
         }
-    }
-    return bestSelection;
+    });
+
+    // Orden visual
+    const ordenPos = { "Colocador": 1, "Centro": 2, "Punta": 3 };
+    return equipos.map(eq => ({
+        ...eq,
+        members: eq.members.sort((a, b) => ordenPos[a.rolFinal] - ordenPos[b.rolFinal])
+    }));
 };
