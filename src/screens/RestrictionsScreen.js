@@ -167,7 +167,7 @@ function RestrictionsScreen() {
                                     const updated = { ...data, restrictions: data.restrictions.filter(x => x.id !== r.id) };
                                     saveGroupData(groupName, updated);
                                     setData(updated);
-                                }} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px' }}>✕</button>
+                                }} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px' }}>🗑️</button>
                             </div>
                         </div>
                     ))}
